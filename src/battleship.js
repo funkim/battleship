@@ -45,6 +45,11 @@ export class Gameboard
     return grid;
 }
 
+pushShips() {
+for (let i = 0; i < this.ships.length; i++) {
+    this.createNewShip(this.ships[i])
+}
+}
 
 createNewShip(ship) {
     let orientation = ship.orientation;
@@ -77,35 +82,50 @@ createNewShip(ship) {
                 }
             }
         }
-
         if (canPlace) {
-            putShipOntoBoard(ship)
+            this.putShipOntoBoard(ship, col, row)
             valid = true; 
         }
     }
 }
 
-putShipOntoBoard(ship) {
-    let orientation = ship.orientation
+putShipOntoBoard(ship, col, row) {
+    let orientation = ship.orientation;
+    let shipLength = ship.length;
             if (orientation === 'Horizontal') {
                 for (let i = 0; i < shipLength; i++) {
-                    this.grid[col + i][row] = ship; 
+                    this.grid[col + i][row] = shipLength; 
                 }
             } else { 
                 for (let i = 0; i < shipLength; i++) {
-                    this.grid[col][row + i] = ship; 
+                    this.grid[col][row + i] = shipLength; 
                 }
             }
 }
 
-    receiveAttack(x, y) {
-
+receiveAttack(x, y) {
+    const ship = this.grid[x][y];
+    if (ship) {
+        ship.hit(); 
+        this.attacks.add(`${x},${y}`); 
+        return "Hit!";
+    } else {
+        this.attacks.add(`${x},${y}`); 
+        return "Miss!";
     }
+}
+
 
     allShipsDestroyed() {
         return this.ships.every(ship => ship.sunk);
     }
+
+    addShip(length) {
+    const ship = new Ship(length);
+    this.ships.push(ship);
+  }
 }
+
 
 
 export class Player

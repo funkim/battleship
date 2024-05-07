@@ -114,7 +114,7 @@ export class Gameboard {
   }
 
   addShip(length) {
-    const ship = new ship(length);
+    const ship = new Ship(length);
     this.ships.push(ship);
   }
 }

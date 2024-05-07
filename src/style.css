@@ -1,0 +1,9 @@
+.container {
+  display: grid;
+  justify-content: center;
+}
+
+.playboard {
+  display: flex;
+  gap: 2px;
+}

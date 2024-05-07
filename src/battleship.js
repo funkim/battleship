@@ -5,7 +5,8 @@ export class Ship
     {
         this.length = length;
         this.damage = 0;
-        this.sunk = false;
+        this.sunk = false; 
+        this.orientation = Math.random() < 0.5 ? 'Horizontal' : 'Vertical';
     }
 
     hit() {
@@ -18,6 +19,7 @@ export class Ship
             this.sunk = true;
         }
     }
+
 }
 
 export class Gameboard
@@ -32,77 +34,74 @@ export class Gameboard
     }
 
     createGrid() {
-        const grid = [];
-        for (let i = 0; i < this.size; i++) {
-        grid[i] = Array(this.size).fill(null);
+        const grid = []
+        for(let i = 0; i < this.size; i++) {
+            let array = [];
+            for(let j = 0; j < this.size; j++) {
+                array.push(null)
+            }
+            grid.push(array)
     }
-        return grid;
+    return grid;
 }
 
-    createShips() {
-        const shipLengths = [5, 4, 3, 3, 2];
-        for (const length of shipLengths) {
-        this.ships.push(new Ship(length));
-    }
-        this.shipsAlive = this.ships.length;
-    }
 
+createNewShip(ship) {
+    let orientation = ship.orientation;
+    let shipLength = ship.length;
+    let valid = false;
 
-    placeShips() {
-    for (const ship of this.ships) {
-        let placed = false;
-        while (!placed) {
-            const orientation = Math.random() < 0.5 ? 'horizontal' : 'vertical';
-            const x = Math.floor(Math.random() * this.size);
-            const y = Math.floor(Math.random() * this.size);
+    while (!valid) {
+        let row = Math.floor(Math.random() * this.size);
+        let col = Math.floor(Math.random() * this.size);
+        let canPlace = true;
 
-            if (this.canPlaceShip(ship, x, y, orientation)) {
-                this.placeShip(ship, x, y, orientation);
-                placed = true;
+        if (orientation === 'Horizontal') {
+            if (col + shipLength > this.size) canPlace = false; 
+            else {
+                for (let i = 0; i < shipLength; i++) {
+                    if (this.grid[col + i][row] !== null) {
+                        canPlace = false;
+                        break;
+                    }
+                }
+            }
+        } else { 
+            if (row + shipLength > this.size) canPlace = false; 
+            else {
+                for (let i = 0; i < shipLength; i++) {
+                    if (this.grid[col][row + i] !== null) {
+                        canPlace = false;
+                        break;
+                    }
                 }
             }
         }
-    }
 
-    canPlaceShip(ship, x, y, orientation) {
-        if (orientation === 'horizontal') {
-            if (x + ship.length > this.size) return false;
-            for (let i = x; i < x + ship.length; i++) {
-            if (this.grid[y][i] !== null) return false;
-            }
-            } else {
-            if (y + ship.length > this.size) return false;
-            for (let i = y; i < y + ship.length; i++) {
-            if (this.grid[i][x] !== null) return false;
-            }
+        if (canPlace) {
+            putShipOntoBoard(ship)
+            valid = true; 
         }
-        return true;
     }
+}
 
-    placeShip(ship, x, y, orientation) {
-        if (orientation === 'horizontal') {
-        for (let i = x; i < x + ship.length; i++) {
-            this.grid[y][i] = ship;
-        }
-        } else {
-        for (let i = y; i < y + ship.length; i++) {
-            this.grid[i][x] = ship;
-        }
-        }
-    }
+putShipOntoBoard(ship) {
+    let orientation = ship.orientation
+            if (orientation === 'Horizontal') {
+                for (let i = 0; i < shipLength; i++) {
+                    this.grid[col + i][row] = ship; 
+                }
+            } else { 
+                for (let i = 0; i < shipLength; i++) {
+                    this.grid[col][row + i] = ship; 
+                }
+            }
+}
 
     receiveAttack(x, y) {
-        const coord = `${x},${y}`;
-        if (this.attacks.has(coord)) {
-        return false;
-        }
-        this.attacks.add(coord);
-        const ship = this.grid[y][x];
-        if (ship !== null) {
-        ship.hit();
-        }
-        return true;
+
     }
+
     allShipsDestroyed() {
         return this.ships.every(ship => ship.sunk);
     }

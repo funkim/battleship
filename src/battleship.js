@@ -1,6 +1,5 @@
-export {Ship , Gameboard, Player }
 
-class Ship
+export class Ship
 {
     constructor(length)
     {
@@ -10,8 +9,8 @@ class Ship
     }
 
     hit() {
-        damage++
-        this.destroyed();
+        this.damage++
+        this.isSunk();
     }
 
     isSunk() {
@@ -21,7 +20,7 @@ class Ship
     }
 }
 
-class Gameboard
+export class Gameboard
 {
     constructor(size)
     {
@@ -110,7 +109,7 @@ class Gameboard
 }
 
 
-class Player
+export class Player
 {
     constructor(type, gameBoard) {
         this.type = type;

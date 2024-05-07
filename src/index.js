@@ -1,7 +1,7 @@
 import { style } from "./style.css"
 import {Ship, Gameboard, Player} from "./battleship.js"
         // Create a gameboard
-        const gameBoard = new Gameboard(10);
+        const gameBoard = new Gameboard(8);
         gameBoard.createShips();
         gameBoard.placeShips();
 
@@ -11,4 +11,3 @@ import {Ship, Gameboard, Player} from "./battleship.js"
         // Example of creating a player
         const player = new Player('human', gameBoard);
         window.player = player;
-        console.log("hi")

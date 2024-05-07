@@ -7,7 +7,7 @@
     "start": "webpack serve --config webpack.config.js --mode development",
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "lint:eslint": "eslint --fix",
-    "lint:prettier": "prettier --write"
+    "lint:prettier": "prettier --write 'src/**/*.js'"
   },
   "keywords": [],
   "author": "",

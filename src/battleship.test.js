@@ -1,3 +1,1 @@
-test('Can ships be placed?'), () => {
-    
-}
+test('Can ships be placed?'), () => {};

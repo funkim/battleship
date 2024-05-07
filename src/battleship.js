@@ -120,8 +120,14 @@ export class Gameboard {
 }
 
 export class Player {
-  constructor(type, gameBoard) {
+  constructor(type) {
     this.type = type;
-    this.gameBoard = gameBoard;
+    this.gameBoard = new Gameboard(8);
+    this.gameBoard.addShip(1);
+    this.gameBoard.addShip(2);
+    this.gameBoard.addShip(3);
+    this.gameBoard.addShip(4);
+    this.gameBoard.addShip(5);
+    this.gameBoard.pushShips();
   }
 }

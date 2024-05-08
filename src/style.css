@@ -7,11 +7,12 @@
 .playboard {
   display: flex;
   justify-content: space-around;
+  border: solid black 2px;
 }
 
 .row {
   display: grid;
-  gap: 10px;
+  gap: 2px;
 }
 
 .row > div {

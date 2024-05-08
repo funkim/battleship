@@ -1,3 +1,4 @@
+import { Ship } from './battleship';
 export function createContainers() {
   const container = document.createElement('div');
   const playerOnePlayBoard = document.createElement('div');
@@ -12,15 +13,19 @@ export function createContainers() {
   playerTwoPlayBoard.id = 'playboardTwo';
 }
 
-function shipOrNot(obj, row) {
-  if (obj === 1 || obj === 2 || obj === 3 || obj === 4 || obj === 5) {
-    let ship = document.createElement('div');
-    row.appendChild(ship).textContent = obj;
+function shipOrNot(obj, cell) {
+  if (obj instanceof Ship) {
+    cell.textContent = obj.length;
+    cell.classList.add('ship');
+  } else if (obj === 'Hit') {
+    cell.textContent = 'X';
+    cell.classList.add('hit');
+  } else if (obj === 'Miss') {
+    cell.textContent = 'O';
+    cell.classList.add('miss');
   } else {
-    let emptySpace = document.createElement('div');
-    row.appendChild(emptySpace);
-    emptySpace.classList.add('empty');
-    emptySpace.textContent = '~';
+    cell.textContent = '~';
+    cell.classList.add('empty');
   }
 }
 
@@ -36,17 +41,19 @@ export function displayField(array, player) {
 }
 
 function rowLoops(gameboard, array, i) {
+  gameboard.innerHTML = ''; // Clear the existing gameboard UI
   array.forEach((obj) => {
     i++;
     let row = document.createElement('div');
     row.id = `row${i}`;
-    row.classList.add('row');
+    row.classList.add('row', 'game-row');
     gameboard.appendChild(row);
-    shipOrNot(obj, row);
 
     obj.forEach((obj) => {
-      // Now loops for every Array inside of the current array aka the row its currently on
-      shipOrNot(obj, row);
+      let cell = document.createElement('div');
+      cell.classList.add('cell', 'game-cell');
+      row.appendChild(cell);
+      shipOrNot(obj, cell);
     });
   });
 }

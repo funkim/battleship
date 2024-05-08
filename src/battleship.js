@@ -88,25 +88,26 @@ export class Gameboard {
     let shipLength = ship.length;
     if (orientation === 'Horizontal') {
       for (let i = 0; i < shipLength; i++) {
-        this.grid[col + i][row] = shipLength;
+        this.grid[col + i][row] = ship;
       }
     } else {
       for (let i = 0; i < shipLength; i++) {
-        this.grid[col][row + i] = shipLength;
+        this.grid[col][row + i] = ship;
       }
     }
   }
 
-  receiveAttack(x, y) {
+  hitOrMiss(x, y) {
     const ship = this.grid[x][y];
-    if (ship) {
+    if (ship instanceof Ship) {
       ship.hit();
-      this.attacks.add(`${x},${y}`);
-      return 'Hit!';
+      this.grid[x][y] = 'Hit';
+      console.log('Hit!');
     } else {
-      this.attacks.add(`${x},${y}`);
-      return 'Miss!';
+      this.grid[x][y] = 'Miss';
+      console.log('Miss!');
     }
+    this.attacks.add(`${x},${y}`);
   }
 
   allShipsDestroyed() {
@@ -122,7 +123,6 @@ export class Gameboard {
 export class Player {
   constructor(type) {
     this.type = type;
-    this.gameBoard = new Gameboard(8);
     this.gameBoard.addShip(1);
     this.gameBoard.addShip(2);
     this.gameBoard.addShip(3);

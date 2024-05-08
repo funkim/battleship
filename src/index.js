@@ -5,11 +5,10 @@ import { setupGameboardListeners } from './interactions.js';
 
 const Real = new Player('Real');
 const Robot = new Player('Robot');
-Real.gameBoard = new Gameboard(8, 'Real');
-Robot.gameBoard = new Gameboard(8, 'Robot');
 createContainers();
 
-displayField(Real.gameBoard.grid, 'Real');
+setupGameboardListeners(Robot.gameBoard, 'Robot');
+setupGameboardListeners(Real.gameBoard, 'Real');
+
 displayField(Robot.gameBoard.grid, 'Robot');
-setupGameboardListeners(Robot.gameBoard);
-setupGameboardListeners(Real.gameBoard);
+displayField(Real.gameBoard.grid, 'Real');

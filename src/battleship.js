@@ -49,27 +49,33 @@ export class Gameboard {
     let orientation = ship.orientation;
     let shipLength = ship.length;
     let valid = false;
+    let attempts = 0;
+    let maxAttempts = 100;
 
-    while (!valid) {
+    while (!valid && attempts < maxAttempts) {
+      attempts++;
       let row = Math.floor(Math.random() * this.size);
       let col = Math.floor(Math.random() * this.size);
       let canPlace = true;
 
       if (orientation === 'Horizontal') {
-        if (col + shipLength > this.size) canPlace = false;
-        else {
+        if (col + shipLength > this.size) {
+          canPlace = false;
+        } else {
           for (let i = 0; i < shipLength; i++) {
-            if (this.grid[col + i][row] !== null) {
+            if (this.grid[row][col + i] !== null) {
               canPlace = false;
               break;
             }
           }
         }
       } else {
-        if (row + shipLength > this.size) canPlace = false;
-        else {
+        // Vertical
+        if (row + shipLength > this.size) {
+          canPlace = false;
+        } else {
           for (let i = 0; i < shipLength; i++) {
-            if (this.grid[col][row + i] !== null) {
+            if (this.grid[row + i][col] !== null) {
               canPlace = false;
               break;
             }
@@ -81,6 +87,10 @@ export class Gameboard {
         valid = true;
       }
     }
+
+    if (attempts === maxAttempts) {
+      console.log('Failed to place the ship after many attempts');
+    }
   }
 
   putShipOntoBoard(ship, col, row) {
@@ -88,28 +98,30 @@ export class Gameboard {
     let shipLength = ship.length;
     if (orientation === 'Horizontal') {
       for (let i = 0; i < shipLength; i++) {
-        this.grid[col + i][row] = ship;
+        this.grid[row][col + i] = ship;
       }
     } else {
+      // Vertical
       for (let i = 0; i < shipLength; i++) {
-        this.grid[col][row + i] = ship;
+        this.grid[row + i][col] = ship;
       }
     }
   }
 
-  hitOrMiss(x, y) {
-    const ship = this.grid[x][y];
+  hitOrMiss(y, x) {
+    console.log(`Coordinates clicked: (${y}, ${x})`);
+    console.log(`Current cell content:`, this.grid[y][x]);
+    const ship = this.grid[y][x];
     if (ship instanceof Ship) {
       ship.hit();
-      this.grid[x][y] = 'Hit';
+      this.grid[y][x] = 'Hit';
       console.log('Hit!');
     } else {
-      this.grid[x][y] = 'Miss';
+      this.grid[y][x] = 'Miss';
       console.log('Miss!');
     }
-    this.attacks.add(`${x},${y}`);
+    this.attacks.add(`${y},${x}`);
   }
-
   allShipsDestroyed() {
     return this.ships.every((ship) => ship.sunk);
   }
@@ -123,6 +135,7 @@ export class Gameboard {
 export class Player {
   constructor(type) {
     this.type = type;
+    this.gameBoard = new Gameboard(8);
     this.gameBoard.addShip(1);
     this.gameBoard.addShip(2);
     this.gameBoard.addShip(3);

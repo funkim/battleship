@@ -16,6 +16,7 @@ export function createContainers() {
 function shipOrNot(obj, cell) {
   if (obj instanceof Ship) {
     cell.textContent = obj.length;
+    cell.style.backgroundColor = 'lightblue';
     cell.classList.add('ship');
   } else if (obj === 'Hit') {
     cell.textContent = 'X';
@@ -42,18 +43,19 @@ export function displayField(array, player) {
 
 function rowLoops(gameboard, array, i) {
   gameboard.innerHTML = ''; // Clear the existing gameboard UI
-  array.forEach((obj) => {
-    i++;
+  array.forEach((rowArray, rowIndex) => {
     let row = document.createElement('div');
-    row.id = `row${i}`;
+    row.id = `row${rowIndex}`;
     row.classList.add('row', 'game-row');
+    row.dataset.y = rowIndex;
     gameboard.appendChild(row);
 
-    obj.forEach((obj) => {
+    rowArray.forEach((cellObj, cellIndex) => {
       let cell = document.createElement('div');
       cell.classList.add('cell', 'game-cell');
+      cell.dataset.x = cellIndex;
       row.appendChild(cell);
-      shipOrNot(obj, cell);
+      shipOrNot(cellObj, cell);
     });
   });
 }

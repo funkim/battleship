@@ -3,8 +3,8 @@ import { Ship, Gameboard, Player } from './battleship.js';
 import { displayField, createContainers } from './dom.js';
 import { setupGameboardListeners } from './interactions.js';
 
-const Real = new Player('Real');
-const Robot = new Player('Robot');
+export const Real = new Player('Real');
+export const Robot = new Player('Robot');
 createContainers();
 
 setupGameboardListeners(Robot.gameBoard, 'Robot');

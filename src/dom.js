@@ -13,10 +13,9 @@ export function createContainers() {
   playerTwoPlayBoard.id = 'playboardTwo';
 }
 
-function shipOrNot(obj, cell) {
+export function shipOrNot(obj, cell) {
   if (obj instanceof Ship) {
     cell.textContent = obj.length;
-    cell.style.backgroundColor = 'lightblue';
     cell.classList.add('ship');
   } else if (obj === 'Hit') {
     cell.textContent = 'X';
